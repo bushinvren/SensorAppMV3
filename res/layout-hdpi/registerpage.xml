@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ff000000"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@id/relativeLayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <TextView
+            android:id="@id/textViewStaticTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/inputTipStr"
+            android:textColor="#ffffffff"
+            android:textSize="20.0dip" />
+
+        <EditText
+            android:id="@id/editTextCode"
+            android:layout_width="200.0dip"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewStaticTextView"
+            android:maxLength="20"
+            android:singleLine="true"
+            />
+
+        <Button
+            android:id="@id/buttonRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/editTextCode"
+            android:layout_below="@id/textViewStaticTextView"
+            android:layout_marginLeft="10.0dip"
+            android:layout_toRightOf="@id/editTextCode"
+            android:text="@string/registerStr" />
+    </RelativeLayout>
+
+</LinearLayout>

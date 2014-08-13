@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="244.0dip" >
+
+    <RelativeLayout
+        android:id="@id/frameLayoutincomandmsg"
+        android:layout_width="fill_parent"
+        android:layout_height="100.0dip"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" >
+
+        <FrameLayout
+            android:id="@id/framelayoutvcenterline"
+            android:layout_width="2.0dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20.0dip"
+            android:layout_marginTop="20.0dip"
+            android:background="#88888888" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="50.0dip"
+            android:layout_marginTop="20.0dip"
+            android:layout_toRightOf="@id/framelayoutvcenterline"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@id/imageViewmessageicon"
+                android:layout_width="48.0dip"
+                android:layout_height="48.0dip"
+                android:src="@drawable/message" />
+
+            <TextView
+                android:id="@id/textViewmessagetext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:text="@string/smsStr"
+                android:textColor="#ffffffff"
+                android:textSize="16.0dip" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@id/framelayoutcamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="50.0dip"
+            android:layout_marginTop="20.0dip"
+            android:layout_toLeftOf="@id/framelayoutvcenterline"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@id/imageViewcameraicon"
+                android:layout_width="48.0dip"
+                android:layout_height="48.0dip"
+                android:src="@drawable/camera" />
+
+            <TextView
+                android:id="@id/textViewcameratext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:text="@string/cameraStr"
+                android:textColor="#ffffffff"
+                android:textSize="16.0dip" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@id/framelayoutHline"
+        android:layout_width="fill_parent"
+        android:layout_height="2.0dip"
+        android:layout_below="@id/frameLayoutincomandmsg"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:layout_marginTop="10.0dip"
+        android:background="#88888888" />
+
+    <RelativeLayout
+        android:id="@id/framelayoutmusic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/framelayoutHline"
+        android:layout_alignRight="@id/framelayoutHline"
+        android:layout_below="@id/framelayoutHline"
+        android:layout_marginLeft="20.0dip"
+        android:layout_marginRight="20.0dip"
+        android:layout_marginTop="20.0dip" >
+
+        <ImageView
+            android:id="@id/imageViewmusicicon"
+            android:layout_width="100.0dip"
+            android:layout_height="80.0dip"
+            android:src="@drawable/bluebackground" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/imageViewmusicicon"
+            android:layout_toRightOf="@id/imageViewmusicicon" >
+
+            <LinearLayout
+                android:id="@id/frameLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@id/imageViewprevious"
+                    android:layout_width="40.0dip"
+                    android:layout_height="40.0dip"
+                    android:src="@drawable/previous" />
+
+                <ImageView
+                    android:id="@id/imageViewplay"
+                    android:layout_width="40.0dip"
+                    android:layout_height="40.0dip"
+                    android:background="@drawable/play" />
+
+                <ImageView
+                    android:id="@id/imageViewnext"
+                    android:layout_width="40.0dip"
+                    android:layout_height="40.0dip"
+                    android:src="@drawable/next" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@id/textViewCurrentMusicName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/frameLayout1"
+                android:layout_centerHorizontal="true"
+                android:ellipsize="marquee"
+                android:gravity="center"
+                android:maxLength="20"
+                android:text=""
+                android:textColor="#ffffffff"
+                android:textSize="16.0dip" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

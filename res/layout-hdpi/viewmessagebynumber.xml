@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/framelayoutmessageviewbynumberheader"
+                android:layout_centerHorizontal="true" >
+
+                <ScrollView
+                    android:id="@id/scrollView1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+
+                    <LinearLayout
+                        android:id="@id/linearscrollmessageviewbynumber"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:orientation="vertical" />
+                </ScrollView>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@id/framelayoutmessageviewbynumberheader"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" >
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+
+                    <TextView
+                        android:id="@id/textViewviewbynumbertitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="32.0dip"
+                        android:text="信息"
+                        android:textColor="#ffffffff"
+                        android:textSize="20.0dip" />
+
+                    <FrameLayout
+                        android:id="@id/framelayoutmessaeviewbynumbershut"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginRight="32.0dip" >
+
+                        <ImageView
+                            android:id="@id/imageView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/shutdown" />
+                    </FrameLayout>
+                </RelativeLayout>
+            </FrameLayout>
+        </RelativeLayout>
+    </FrameLayout>
+
+</LinearLayout>

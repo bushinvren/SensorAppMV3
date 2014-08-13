@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="280.0dip" >
+
+    <RelativeLayout
+        android:id="@id/frameLayoutdateandclock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" >
+
+        <TextView
+            android:id="@id/textViewCurrentdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/simpledigitalclock"
+            android:layout_centerHorizontal="true"
+            android:text="12-24 星期三"
+            android:textColor="#ffffffff"
+            android:textSize="18.0dip" />
+
+        <TextView
+            android:id="@id/simpledigitalclock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="12:05"
+            android:textColor="#ffffffff"
+            android:textSize="64.0dip" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="124.0dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/frameLayoutdateandclock" >
+
+        <RelativeLayout
+            android:id="@id/frameLayoutmissedincomingandnewmessage"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal" >
+
+            <FrameLayout
+                android:id="@id/framelayoutcenterline"
+                android:layout_width="2.0dip"
+                android:layout_height="32.0dip"
+                android:layout_centerInParent="true"
+                android:background="#ff888888"
+                android:visibility="invisible" />
+
+            <RelativeLayout
+                android:id="@id/framelayoutnewmessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="20.0dip"
+                android:layout_toRightOf="@id/framelayoutcenterline" >
+
+                <ImageView
+                    android:id="@id/imageViewnewmessageicon"
+                    android:layout_width="32.0dip"
+                    android:layout_height="32.0dip"
+                    android:src="@drawable/newmessage" />
+
+                <TextView
+                    android:id="@id/textViewnewmessagenumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5.0dip"
+                    android:layout_toRightOf="@id/imageViewnewmessageicon"
+                    android:text="99"
+                    android:textColor="#ffffffff"
+                    android:textSize="24.0dip" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@id/framelayoutmissedincoming"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="20.0dip"
+                android:layout_toLeftOf="@id/framelayoutcenterline" >
+
+                <ImageView
+                    android:id="@id/imageViewmissedincomingicon"
+                    android:layout_width="32.0dip"
+                    android:layout_height="32.0dip"
+                    android:src="@drawable/missedincoming" />
+
+                <TextView
+                    android:id="@id/textViewmissedincomingnumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5.0dip"
+                    android:layout_toRightOf="@id/imageViewmissedincomingicon"
+                    android:text=""
+                    android:textColor="#ffffffff"
+                    android:textSize="24.0dip" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <view
+            android:id="@+id/pageStart"
+            android:layout_width="200dip"
+            android:layout_height="100dip"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/frameLayoutmissedincomingandnewmessage"
+            class="com.example.sensorapp.ui.LockImageView"
+            android:scaleType="centerInside"
+            android:src="@drawable/tomainpage" />
+    </RelativeLayout>
+
+</RelativeLayout>

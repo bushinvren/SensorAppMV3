@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="33dp"
+        android:layout_marginTop="28dp"
+        android:text="请输入序列号进行注册"
+        android:textColor="#aaaaaa"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/sNum"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="17dp"
+        android:ems="10"
+        android:textColor="@android:color/black" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/confirm"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/sNum"
+        android:layout_below="@+id/sNum"
+        android:layout_marginTop="14dp"
+        android:text="注册" />
+
+</RelativeLayout>

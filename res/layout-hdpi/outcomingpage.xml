@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ff000000"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="320.0dip"
+        android:background="@drawable/back00" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <FrameLayout
+                android:id="@id/frameLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="150.0dip"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" >
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+
+                    <FrameLayout
+                        android:id="@id/frameLayout3"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true" >
+
+                        <RelativeLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent" >
+
+                            <FrameLayout
+                                android:id="@id/frameLayout2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true" >
+
+                                <RelativeLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent" >
+
+                                    <FrameLayout
+                                        android:id="@id/frameLayout4"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true" >
+
+                                        <ImageView
+                                            android:id="@id/imageView1"
+                                            android:layout_width="48.0dip"
+                                            android:layout_height="48.0dip"
+                                            android:src="@drawable/outcoming" />
+                                    </FrameLayout>
+
+                                    <FrameLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_toRightOf="@id/frameLayout4" >
+
+                                        <TextView
+                                            android:id="@id/textViewoutcomingnumber"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="12345678900"
+                                            android:textColor="#ffffffff"
+                                            android:textSize="26.0dip" />
+                                    </FrameLayout>
+                                </RelativeLayout>
+                            </FrameLayout>
+                        </RelativeLayout>
+                    </FrameLayout>
+                </RelativeLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@id/framelayoutoutcomingview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/frameLayout1" />
+        </RelativeLayout>
+    </FrameLayout>
+
+</LinearLayout>

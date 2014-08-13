@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/relativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent" >
+
+    <TableLayout
+        android:id="@id/tableLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/relativeLayout2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="15.0dip"
+        android:layout_marginRight="15.0dip" >
+
+        <TableRow
+            android:id="@id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@id/textViewDailNumber1"
+                android:layout_width="0dip"
+                android:layout_height="40.0dip"
+                android:layout_weight="1"
+                android:background="@drawable/keybackground"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="#ffffffff"
+                android:textSize="30.0dip" />
+
+            <TextView
+                android:id="@id/textViewDailNumber2"
+                android:layout_width="0dip"
+                android:layout_height="40.0dip"
+                android:layout_weight="1"
+                android:background="@drawable/keybackground"
+                android:gravity="center"
+                android:text="2"
+                android:textColor="#ffffffff"
+                android:textSize="30.0dip" />
+
+            <TextView
+                android:id="@id/textViewDailNumber3"
+                android:layout_width="0dip"
+                android:layout_height="40.0dip"
+                android:layout_weight="1"
+                android:background="@drawable/keybackground"
+                android:gravity="center"
+                android:text="3"
+                android:textColor="#ffffffff"
+                android:textSize="30.0dip" />
+        </TableRow>
+
+        <TableRow
+            android:id="@id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@id/textViewDailNumber4"
+                android:layout_width="0dip"
+                android:layout_height="40.0dip"
+                android:layout_weight="1"
+                android:background="@drawable/keybackground"
+                android:gravity="center"
+                android:text="4"
+                android:textColor="#ffffffff"
+                android:textSize="30.0dip" />
+
+            <TextView
+                android:id="@id/textViewDailNumber5"
+                android:layout_width="0dip"
+                android:layout_height="40.0dip"
+                android:layout_weight="1"
+                android:background="@drawable/keybackground"
+                android:gravity="center"
+                android:text="5"
+                android:textColor="#ffffffff"
+                android:textSize="30.0dip" />
+
+            <TextView
+                android:id="@id/textViewDailNumber6"
+                android:layout_width="0dip"
+                android:layout_height="40.0dip"
+                android:layout_weight="1"
+                android:background="@drawable/keybackground"
+                android:gravity="center"
+                android:text="6"
+                android:textColor="#ffffffff"
+                android:textSize="30.0dip" />
+        </TableRow>
+
+        <TableRow
+            android:id="@id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@id/textViewDailNumber7"
+                android:layout_width="0dip"
+                android:layout_height="40.0dip"
+                android:layout_weight="1"
+                android:background="@drawable/keybackground"
+                android:gravity="center"
+                android:text="7"
+                android:textColor="#ffffffff"
+                android:textSize="30.0dip" />
+
+            <TextView
+                android:id="@id/textViewDailNumber8"
+                android:layout_width="0dip"
+                android:layout_height="40.0dip"
+                android:layout_weight="1"
+                android:background="@drawable/keybackground"
+                android:gravity="center"
+                android:text="8"
+                android:textColor="#ffffffff"
+                android:textSize="30.0dip" />
+
+            <TextView
+                android:id="@id/textViewDailNumber9"
+                android:layout_width="0dip"
+                android:layout_height="40.0dip"
+                android:layout_weight="1"
+                android:background="@drawable/keybackground"
+                android:gravity="center"
+                android:text="9"
+                android:textColor="#ffffffff"
+                android:textSize="30.0dip" />
+        </TableRow>
+
+        <TableRow
+            android:id="@id/tableRow4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@id/textViewDailStar"
+                android:layout_width="0dip"
+                android:layout_height="40.0dip"
+                android:layout_weight="1"
+                android:background="@drawable/keybackground"
+                android:gravity="center"
+                android:text="*"
+                android:textColor="#ffffffff"
+                android:textSize="30.0dip" />
+
+            <TextView
+                android:id="@id/textViewDailNumber0"
+                android:layout_width="0dip"
+                android:layout_height="40.0dip"
+                android:layout_weight="1"
+                android:background="@drawable/keybackground"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#ffffffff"
+                android:textSize="30.0dip" />
+
+            <TextView
+                android:id="@id/textViewDailPound"
+                android:layout_width="0dip"
+                android:layout_height="40.0dip"
+                android:layout_weight="1"
+                android:background="@drawable/keybackground"
+                android:gravity="center"
+                android:text="\#"
+                android:textColor="#ffffffff"
+                android:textSize="30.0dip" />
+        </TableRow>
+    </TableLayout>
+
+    <RelativeLayout
+        android:id="@id/relativeLayout6"
+        android:layout_width="160.0dip"
+        android:layout_height="40.0dip"
+        android:layout_below="@id/tableLayout1"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/callout" >
+
+        <ImageView
+            android:id="@id/imageView1"
+            android:layout_width="30.0dip"
+            android:layout_height="30.0dip"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="39.0dip"
+            android:src="@drawable/phoneicon" />
+
+        <TextView
+            android:id="@id/textViewTextmakephonecall"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/imageView1"
+            android:gravity="center"
+            android:text="@string/callStr"
+            android:textColor="#ff29ad1a"
+            android:textSize="20.0dip" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@id/relativeLayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="42.0dip"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15.0dip"
+        android:layout_marginRight="15.0dip" >
+
+        <TextView
+            android:id="@id/textViewDailTelNumber"
+            android:layout_width="0dip"
+            android:layout_height="38.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:layout_weight="5"
+            android:background="#55555555"
+            android:textColor="#ffffff"
+            android:textSize="30.0dip" />
+
+        <ImageView
+            android:id="@id/imageViewDailDelete"
+            android:layout_width="0dip"
+            android:layout_height="38.0dip"
+            android:layout_weight="1"
+            android:src="@drawable/deletenumber" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ff000000"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@id/Applicationmainframe"
+        android:layout_width="fill_parent"
+        android:layout_height="320dip" >
+
+        <ImageView
+            android:id="@+id/bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <FrameLayout
+                android:id="@+id/ViewSetLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="250.0dip"
+                android:layout_centerHorizontal="true" >
+
+                <view
+                    android:id="@id/ViewSet"
+                    android:layout_width="fill_parent"
+                    android:layout_height="244.0dip"
+                    class="com.example.sensorapp.ui.CustomViewPager"
+                    android:persistentDrawingCache="animation" />
+
+                <FrameLayout
+                    android:id="@+id/lockPageLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                </FrameLayout>
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@id/hlayoutCurPage"
+                android:layout_width="fill_parent"
+                android:layout_height="28.0dip"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:orientation="horizontal" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent" >
+        </FrameLayout>
+    </FrameLayout>
+
+</LinearLayout>
