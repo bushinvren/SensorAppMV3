@@ -1,0 +1,85 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ff000000" >
+
+    <RelativeLayout
+        android:id="@+id/incomingCallLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/incomingCallInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical"
+            android:text="86075523333333333"
+            android:textColor="@android:color/white"
+            android:textSize="48sp" />
+
+        <FrameLayout
+            android:id="@+id/callCheckLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/incomingCallInfo" >
+
+            <ImageView
+                android:id="@+id/answeringCall"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/new_answer"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/hangingCall"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/new_hangup" />
+        </FrameLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/answeringLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="40dp"
+        android:visibility="invisible" >
+
+        <TextView
+            android:id="@+id/callTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="01:23"
+            android:textColor="@android:color/white"
+            android:textSize="128sp" />
+
+        <ImageView
+            android:id="@+id/hangupCall"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/callTime"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/app_name"
+            android:gravity="center"
+            android:src="@drawable/new_hangup" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/closeBtn"
+        android:layout_width="30dip"
+        android:layout_height="30dip"
+        android:layout_gravity="right|top"
+        android:layout_margin="10dip"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerInside"
+        android:src="@drawable/shutdown"
+        android:visibility="invisible" />
+
+</RelativeLayout>

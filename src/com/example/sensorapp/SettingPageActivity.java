@@ -3,11 +3,6 @@
  */
 package com.example.sensorapp;
 
-import com.example.sensorapp.music.Mp3Info;
-import com.example.sensorapp.music.Mp3PlayerService;
-import com.example.sensorapp.util.Util;
-
-import android.R.integer;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -17,14 +12,15 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Toast;
+
+import com.example.sensorapp.util.Util;
 
 /**
  * @author Administrator
@@ -35,7 +31,6 @@ public class SettingPageActivity extends Activity implements
 {
 	private View serviceFrameLayout;
 	private View startServiceFrameLayout;
-	private View setBackgroundFrameLayout;
 	private CheckBox serviceStartCheckBox;
 	private CheckBox openServiceCheckBox;
 
@@ -50,12 +45,10 @@ public class SettingPageActivity extends Activity implements
 	{
 		serviceFrameLayout = findViewById(R.id.serviceFrameLayout);
 		startServiceFrameLayout = findViewById(R.id.startServiceFrameLayout);
-		setBackgroundFrameLayout = findViewById(R.id.setBackgroundFrameLayout);
 		serviceStartCheckBox = (CheckBox) findViewById(R.id.serviceStartCheckBox);
 		openServiceCheckBox = (CheckBox) findViewById(R.id.openServiceCheckBox);
 		serviceFrameLayout.setOnClickListener(this);
 		startServiceFrameLayout.setOnClickListener(this);
-		setBackgroundFrameLayout.setOnClickListener(this);
 		serviceStartCheckBox.setOnCheckedChangeListener(this);
 		openServiceCheckBox.setOnCheckedChangeListener(this);
 
@@ -160,13 +153,6 @@ public class SettingPageActivity extends Activity implements
 		case R.id.startServiceFrameLayout:
 		{
 			openServiceCheckBox.setChecked(!openServiceCheckBox.isChecked());
-			break;
-		}
-		case R.id.setBackgroundFrameLayout:
-		{
-			Intent intent = new Intent(this, SettingWallpaperActivity.class);
-			intent.setAction(Intent.ACTION_VIEW);
-			startActivity(intent);
 			break;
 		}
 

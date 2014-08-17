@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -33,8 +34,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Filter;
 
-public class SensorService extends Service
-{
+public class SensorService extends Service {
 	private IBinder binder = new SensorService.LocalBinder();
 	private boolean isRun = false;
 
@@ -47,9 +47,9 @@ public class SensorService extends Service
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
 	WakeLock wl;
-	//private int mRate = SensorManager.SENSOR_DELAY_NORMAL;
-	private int mRate = 5000;
-	
+	private int mRate = SensorManager.SENSOR_DELAY_NORMAL;
+	// private int mRate = 50000;
+
 	private float value = -999f;
 
 	public static boolean isCloseCover = false;
@@ -70,35 +70,29 @@ public class SensorService extends Service
 
 	ScreenReceiver sr = new ScreenReceiver();
 
-	private BroadcastReceiver myReceiver = new BroadcastReceiver()
-	{
+	private BroadcastReceiver myReceiver = new BroadcastReceiver() {
 
 		@Override
-		public void onReceive(Context context, Intent intent)
-		{
+		public void onReceive(Context context, Intent intent) {
 			// TODO Auto-generated method stub
-			if (intent.getAction().equals("action.hs.closesensor"))
-			{
+			if (intent.getAction().equals("action.hs.closesensor")) {
 				// closeSensor();
 			}
 
-			if (intent.getAction().equals("action.hs.opensensor"))
-			{
+			if (intent.getAction().equals("action.hs.opensensor")) {
 				// openSensor();
 			}
 		}
 	};
 
 	@Override
-	public IBinder onBind(Intent intent)
-	{
+	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
 		return binder;
 	}
 
 	@Override
-	public void onCreate()
-	{
+	public void onCreate() {
 		super.onCreate();
 		SharedPreferences preferences = getSharedPreferences("settingInfos",
 				Context.MODE_PRIVATE);
@@ -133,7 +127,7 @@ public class SensorService extends Service
 
 		mActivity = ((SensorApp) getApplication()).getInstance();
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 		mSensorManager.registerListener(mSensorListener, mSensor, mRate);
 
 		isRun = true;
@@ -146,10 +140,8 @@ public class SensorService extends Service
 	};
 
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId)
-	{
-		try
-		{
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		try {
 			// TODO Auto-generated method stub
 			if (intent.getBooleanExtra("OUTCALL", false))// 去电
 			{
@@ -168,21 +160,22 @@ public class SensorService extends Service
 			{
 				callViewHelper.setIncomingNumber(intent
 						.getStringExtra("INCOMINGNUMS"));
-				
-//				PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-//			    wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "My Tag");
-//			    wl.acquire();
-//			    wl.release();
-//
-//			    new Handler().postDelayed(new Runnable(){    
-//			        public void run() {    
-//			        //execute the task   
-//			        	wl.acquire();
-//			        }    
-//			     }, 3000); 
+
+				// PowerManager pm = (PowerManager)
+				// getSystemService(Context.POWER_SERVICE);
+				// wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+				// "My Tag");
+				// wl.acquire();
+				// wl.release();
+				//
+				// new Handler().postDelayed(new Runnable(){
+				// public void run() {
+				// //execute the task
+				// wl.acquire();
+				// }
+				// }, 3000);
 			}
-		} catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			Log.e("serviceError", ex.toString());
 		}
 
@@ -190,109 +183,98 @@ public class SensorService extends Service
 		// return super.onStartCommand(intent, flags, startId);
 	}
 
-	public void openSensor()
-	{
+	public void openSensor() {
 		isRun = true;
 		mSensorManager.registerListener(mSensorListener, mSensor, mRate);
 	}
 
-	public void closeSensor()
-	{
+	public void closeSensor() {
 		mSensorManager.unregisterListener(mSensorListener, mSensor);
 		isRun = false;
 	}
 
-	public void showViewCallWithAnsweringMode(boolean answerMode)
-	{
-		if (isCloseCover)
-		{
+	public void showViewCallWithAnsweringMode(boolean answerMode) {
+		if (isCloseCover) {
 			callViewHelper.setAnsweringMode(answerMode);
 		}
 	}
 
-	public void showCallView(String incomingNums)
-	{
-		try
-		{
+	public void showCallView(String incomingNums) {
+		try {
 			Thread.sleep(2000);
-		} catch (InterruptedException e)
-		{
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (isCloseCover)
-		{
+		if (isCloseCover) {
 			callViewHelper.show();
 			callViewHelper.setIncomingNumber(incomingNums);
 			// powerManagerHelper.wakeUp();
 		}
 	}
 
-	public void closeViewCall()
-	{
+	public void closeViewCall() {
 		callViewHelper.close();
 	}
 
-	private final SensorEventListener mSensorListener = new SensorEventListener()
-	{
+	private final SensorEventListener mSensorListener = new SensorEventListener() {
 
 		@Override
-		public void onSensorChanged(SensorEvent event)
-		{
+		public void onSensorChanged(SensorEvent event) {
+
 			// 判断是否注册
-			if (GlobalVar.checkId)
-			{
+			if (GlobalVar.checkId) {
 				SharedPreferences preferences2 = getApplicationContext()
 						.getSharedPreferences("registerInfo",
 								Context.MODE_PRIVATE);
 				boolean reg = preferences2.getBoolean("register", false);
-				if (!reg)
-				{
+				if (!reg) {
 					return;
 				}
 			}
 
 			// 判断是否开启
-			if (!GlobalVar.isOpenSensor)
-			{
+			if (!GlobalVar.isOpenSensor) {
 				return;
 			}
+			// Log.e("zhurwO",
+			// String.valueOf(getResources().getConfiguration().orientation));
+			// 判断横竖屏
 
+			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+				return;
+			}
 			// 屏蔽腾讯软件
 			ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 			List<RunningTaskInfo> tasksInfo = activityManager
 					.getRunningTasks(1);
 			String currentPackName = "";
-			if (tasksInfo.size() > 0)
-			{
+			if (tasksInfo.size() > 0) {
 
 				currentPackName = tasksInfo.get(0).topActivity.getPackageName();
 				Log.e("current", currentPackName);
 			}
-			if (currentPackName.contains("com.tencent"))
-			{
+			if (currentPackName.contains("com.tencent")) {
 				return;
 			}
 
 			// TODO Auto-generated method stub
-			if (event.sensor.getType() != Sensor.TYPE_MAGNETIC_FIELD)
+			if (event.sensor.getType() != Sensor.TYPE_PROXIMITY)
 				return;
 			value = event.values[SensorManager.DATA_X];
 			float valuey = event.values[SensorManager.DATA_Y];
 			float valuez = event.values[SensorManager.DATA_Z];
-			
-			
-			Log.d("valuex", String.valueOf(value));
-			Log.d("valuey", String.valueOf(valuey));
-			Log.d("valuez", String.valueOf(valuez));
-			Log.d("valued", String.valueOf(value+valuez+valuey));
-			if (Math.abs(valuey) > 400 && isCloseCover)// 远离
+			Log.e("valuex", String.valueOf(value));
+			Log.e("valuey", String.valueOf(valuey));
+			Log.e("valuez", String.valueOf(valuez));
+
+			if (value > 0)// 远离
 			{
+				Thread.interrupted();//  中断sleep，可防止传感器过度灵敏
 				isCloseCover = false;
 				// 之前的方法太暴力，不管当前在运行什么都会被切换到后台去。
 				// 此方式只结束当前的程序，而service在结束自己后又会自动启动，所以可行。
-				if (isAppOnForeground())
-				{
+				if (isAppOnForeground()) {
 					// android.os.Process.killProcess(android.os.Process.myPid());
 
 					// Intent MyIntent = new Intent(Intent.ACTION_MAIN);
@@ -307,12 +289,11 @@ public class SensorService extends Service
 
 				callViewHelper.close();
 
-			} else if(Math.abs(valuey) < 400 && !isCloseCover)
+			} else
 			// 关闭
 			{
-				try
-				{
-					
+				try {
+					Thread.sleep(150);// 为了减低传感器灵敏度，与上面的Thread.interrupted()配合
 					isCloseCover = true;
 					{
 
@@ -324,21 +305,18 @@ public class SensorService extends Service
 						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
 					}
-					if (phoneStatesListener.getCurrentState() == TelephonyManager.CALL_STATE_RINGING)
-					{
+					if (phoneStatesListener.getCurrentState() == TelephonyManager.CALL_STATE_RINGING) {
 						Message msg = handler
 								.obtainMessage(MyPhoneStatesListener.MSG_CALL_RING);
 						msg.obj = phoneStatesListener.getIncomingNumber();
 						msg.sendToTarget();
 					}
-					if (phoneStatesListener.getCurrentState() == TelephonyManager.CALL_STATE_OFFHOOK)
-					{
+					if (phoneStatesListener.getCurrentState() == TelephonyManager.CALL_STATE_OFFHOOK) {
 						handler.sendEmptyMessage(MyPhoneStatesListener.MSG_CALL_HOOK);
 					}
-				} catch (Exception e)
-				{
+				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
-					Log.e("onSensorChange",e.toString());
+					Log.e("tag", "时间太短，不出现界面");
 				}
 
 			}
@@ -348,16 +326,14 @@ public class SensorService extends Service
 		// }
 
 		@Override
-		public void onAccuracyChanged(Sensor sensor, int accuracy)
-		{
+		public void onAccuracyChanged(Sensor sensor, int accuracy) {
 			// TODO Auto-generated method stub
 			Log.e("!!!!", "onAccuracyChanged");
 		}
 	};
 
 	@Override
-	public void onDestroy()
-	{
+	public void onDestroy() {
 		// TODO Auto-generated method stub
 		// liuzw.
 		super.onDestroy();
@@ -367,8 +343,7 @@ public class SensorService extends Service
 				"settingInfo", Context.MODE_PRIVATE);
 		boolean startServiceFlag = preferences.getBoolean("startService", true);
 
-		if (startServiceFlag == false)
-		{
+		if (startServiceFlag == false) {
 			return;
 		}
 
@@ -381,33 +356,25 @@ public class SensorService extends Service
 
 	}
 
-	public class LocalBinder extends Binder
-	{
+	public class LocalBinder extends Binder {
 		// 返回本地服务
-		public SensorService getService()
-		{
+		public SensorService getService() {
 			return SensorService.this;
 		}
 	}
 
-	final Handler handler = new Handler()
-	{
+	final Handler handler = new Handler() {
 
 		@Override
-		public void handleMessage(Message msg)
-		{
-			switch (msg.what)
-			{
-			case MyPhoneStatesListener.MSG_UPDATE_CALL_TIME:
-			{
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case MyPhoneStatesListener.MSG_UPDATE_CALL_TIME: {
 				callViewHelper.updateCallTime(msg.arg1);
 				// callViewHelper.setIncomingNumber(String.valueOf(msg.arg2));
 				break;
 			}
-			case MyPhoneStatesListener.MSG_CALL_RING:
-			{
-				if (isCloseCover)
-				{
+			case MyPhoneStatesListener.MSG_CALL_RING: {
+				if (isCloseCover) {
 					callViewHelper.show();
 					String num = (String) msg.obj;
 					if (!num.equals(""))
@@ -418,14 +385,12 @@ public class SensorService extends Service
 				}
 			}
 				break;
-			case MyPhoneStatesListener.MSG_CALL_END:
-			{
+			case MyPhoneStatesListener.MSG_CALL_END: {
 				callViewHelper.setIncomingNumber("");
 				callViewHelper.close();
 				break;
 			}
-			case MyPhoneStatesListener.MSG_CALL_HOOK:
-			{
+			case MyPhoneStatesListener.MSG_CALL_HOOK: {
 				callViewHelper.setAnsweringMode(true);
 			}
 				break;
@@ -440,8 +405,7 @@ public class SensorService extends Service
 	 * 
 	 * @return
 	 */
-	public boolean isAppOnForeground()
-	{
+	public boolean isAppOnForeground() {
 		// Returns a list of application processes that are running on the
 		// device
 		List<RunningAppProcessInfo> appProcesses = activityManager
@@ -449,12 +413,10 @@ public class SensorService extends Service
 		if (appProcesses == null)
 			return false;
 		String packageName = getPackageName();
-		for (RunningAppProcessInfo appProcess : appProcesses)
-		{
+		for (RunningAppProcessInfo appProcess : appProcesses) {
 			// The name of the process that this object is associated with.
 			if (appProcess.processName.equals(packageName)
-					&& appProcess.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND)
-			{
+					&& appProcess.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
 				return true;
 			}
 		}

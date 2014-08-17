@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.PixelFormat;
 import android.net.Uri;
@@ -24,23 +23,23 @@ import com.android.internal.telephony.ITelephony;
 import com.example.sensorapp.ui.LockImageView;
 
 public class CallViewHelper implements LockImageView.OnUnLockListener,
-		View.OnClickListener
-{
+		View.OnClickListener {
 	private String incomingNumber;
 	// private long callTime;
 
 	private Context context = null;
 	private View view;
 
-	private ImageView bgImageView;
 	private TextView incomingNumberTextView;
-	private LockImageView answerCallView;
-	private LockImageView blockCallView;
+	// private LockImageView answerCallView;
+	// private LockImageView blockCallView;
 	private TextView callTimeTextView;
 	private View hangupView;
 	private View callCheckLayout;
 	private View answeringLayout;
 	private View closeBtn;
+	private ImageView answerCallImageView;
+	private ImageView hangCallImageView;
 
 	public ITelephony iTelephony;
 	private int selectedIndex = 0;
@@ -49,19 +48,11 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 
 	private boolean visible = false;
 
-	public boolean getVisible()
-	{
+	public boolean getVisible() {
 		return visible;
 	}
 
-	private final static int[] rBacks =
-	{ R.drawable.back00, R.drawable.back01, R.drawable.back02,
-			R.drawable.back03, R.drawable.back04, R.drawable.back05,
-			R.drawable.back06, R.drawable.back07, R.drawable.back08,
-			R.drawable.back09 };
-
-	public CallViewHelper(Context context)
-	{
+	public CallViewHelper(Context context) {
 		this.context = context;
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -69,8 +60,7 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 		init();
 	}
 
-	private void init()
-	{
+	private void init() {
 
 		windowManager = (WindowManager) context.getApplicationContext()
 				.getSystemService(Context.WINDOW_SERVICE);
@@ -82,72 +72,53 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 						| WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
 				PixelFormat.RGBA_8888);
 
-		bgImageView = (ImageView) view.findViewById(R.id.bg);
 		incomingNumberTextView = (TextView) view
 				.findViewById(R.id.incomingCallInfo);
-		answerCallView = (LockImageView) view.findViewById(R.id.answerCall);
-		blockCallView = (LockImageView) view.findViewById(R.id.blockCall);
+		// answerCallView = (LockImageView) view.findViewById(R.id.answerCall);
+		// blockCallView = (LockImageView) view.findViewById(R.id.blockCall);
+		answerCallImageView = (ImageView) view.findViewById(R.id.answeringCall);
+		hangCallImageView = (ImageView) view.findViewById(R.id.hangingCall);
 		callTimeTextView = (TextView) view.findViewById(R.id.callTime);
 		hangupView = view.findViewById(R.id.hangupCall);
 		callCheckLayout = view.findViewById(R.id.callCheckLayout);
 		answeringLayout = view.findViewById(R.id.answeringLayout);
 		closeBtn = view.findViewById(R.id.closeBtn);
 
-		SharedPreferences preferences = context.getSharedPreferences(
-				"settingInfos", Context.MODE_PRIVATE);
-		selectedIndex = preferences.getInt("bgSelectedIndex", selectedIndex);
-
-		bgImageView.setImageResource(rBacks[selectedIndex]);
-
 		TelephonyManager telephonyManager = (TelephonyManager) context
 				.getSystemService(Context.TELEPHONY_SERVICE);
-		try
-		{
+		try {
 			Method getITelephonyMethod = telephonyManager.getClass()
 					.getDeclaredMethod("getITelephony");
 			getITelephonyMethod.setAccessible(true);
 			iTelephony = (ITelephony) getITelephonyMethod
 					.invoke(telephonyManager);
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		answerCallView.setOnLockListener(this);
-		blockCallView.setOnLockListener(this);
+		// answerCallView.setOnLockListener(this);
+		// blockCallView.setOnLockListener(this);
+		answerCallImageView.setOnClickListener(this);
+		hangCallImageView.setOnClickListener(this);
 		hangupView.setOnClickListener(this);
 		closeBtn.setOnClickListener(this);
 	}
 
-	public void setBgImg()
-	{
-		SharedPreferences preferences = context.getSharedPreferences(
-				"settingInfos", Context.MODE_PRIVATE);
-		selectedIndex = preferences.getInt("bgSelectedIndex", selectedIndex);
-		bgImageView.setImageResource(rBacks[selectedIndex]);
-	}
-
-	public void show()
-	{
-		setBgImg();
-		if (visible == false)
-		{
+	public void show() {
+		if (visible == false) {
 			windowManager.addView(view, param);
 			visible = true;
 			setAnsweringMode(false);
 		}
 	}
 
-	public void setAnsweringMode(boolean t)
-	{
+	public void setAnsweringMode(boolean t) {
 		show();
-		if (t)
-		{
+		if (t) {
 			callCheckLayout.setVisibility(View.INVISIBLE);
 			answeringLayout.setVisibility(View.VISIBLE);
 
-		} else
-		{
+		} else {
 			callCheckLayout.setVisibility(View.VISIBLE);
 			answeringLayout.setVisibility(View.INVISIBLE);
 			callTimeTextView.setText("");
@@ -155,81 +126,64 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 		}
 	}
 
-	public void setIncomingNumber(String numberString)
-	{
-		if (visible)
-		{
-			try{
-			incomingNumberTextView.setText(getContactNameFromPhoneBook(context,
-					numberString));
-			Log.e("test", getContactNameFromPhoneBook(context, numberString));
-			}
-			catch(Exception ex)
-			{
-				Log.e("incomingNumberEx",ex.toString());
+	public void setIncomingNumber(String numberString) {
+		if (visible) {
+			try {
+				incomingNumberTextView.setText(getContactNameFromPhoneBook(
+						context, numberString));
+				Log.e("test",
+						getContactNameFromPhoneBook(context, numberString));
+			} catch (Exception ex) {
+				Log.e("incomingNumberEx", ex.toString());
 			}
 		}
 	}
 
-	public void close()
-	{
-		try
-		{
-			if (visible)
-			{
+	public void close() {
+		try {
+			if (visible) {
 				setAnsweringMode(false);
 				windowManager.removeView(view);
 				visible = false;
 			}
 
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			// TODO: handle exception
 		}
 
 	}
 
-	private void endCall()
-	{
-		try
-		{
+	private void endCall() {
+		try {
 			callCheckLayout.setVisibility(View.VISIBLE);
 			answeringLayout.setVisibility(View.INVISIBLE);
 			// liuzw. 2014 0122. iTelephony 可能为空。 异常后界面无法消除。
-			if (iTelephony != null)
-			{
+			if (iTelephony != null) {
 				iTelephony.endCall();
 			}
 
-		} catch (RemoteException e)
-		{
+		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally
-		{
+		} finally {
 			close();
 		}
 	}
 
-	private void answerCall()
-	{
-		try
-		{
+	private void answerCall() {
+		try {
 
 			callCheckLayout.setVisibility(View.INVISIBLE);
 			answeringLayout.setVisibility(View.VISIBLE);
 
 			// liuzw. 20140122. iTelephony == null.
-			if (iTelephony != null)
-			{
+			if (iTelephony != null) {
 				iTelephony.answerRingingCall();
 			}
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Log.e("call_answer", e.toString());
-			try
-			{
+			try {
 				// 插耳机
 				Intent localIntent1 = new Intent(Intent.ACTION_HEADSET_PLUG);
 				localIntent1.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -266,30 +220,27 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 				context.sendOrderedBroadcast(localIntent4,
 						"android.permission.CALL_PRIVILEGED");
 
-			} catch (Exception e2)
-			{
+			} catch (Exception e2) {
 				Log.e("call_answer", e2.toString());
 				Intent meidaButtonIntent = new Intent(
 						Intent.ACTION_MEDIA_BUTTON);
 				KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_UP,
 						KeyEvent.KEYCODE_HEADSETHOOK);
 				meidaButtonIntent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
-				context.sendOrderedBroadcast(meidaButtonIntent, "android.permission.CALL_PRIVILEGED");
+				context.sendOrderedBroadcast(meidaButtonIntent,
+						"android.permission.CALL_PRIVILEGED");
 			}
 		}
 	}
 
-	public void updateCallTime(long time)
-	{
-		if (visible)
-		{
+	public void updateCallTime(long time) {
+		if (visible) {
 			callTimeTextView.setText(getFormatTime(time));
 		}
 	}
 
 	public static String getContactNameFromPhoneBook(Context context,
-			String phoneNum)
-	{
+			String phoneNum) {
 		String contactName = phoneNum;
 		// ContentResolver cr = context.getContentResolver();
 		// Cursor pCur = cr.query(
@@ -297,8 +248,7 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 		// ContactsContract.CommonDataKinds.Phone.NUMBER + " = ?",
 		// new String[] { phoneNum }, null);
 
-		String[] projection =
-		{ ContactsContract.PhoneLookup.DISPLAY_NAME,
+		String[] projection = { ContactsContract.PhoneLookup.DISPLAY_NAME,
 				ContactsContract.PhoneLookup.NUMBER };
 		Uri uri = Uri.withAppendedPath(
 				ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
@@ -308,8 +258,7 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 
 		if (cursor == null)
 			return phoneNum;
-		if (cursor.moveToFirst())
-		{
+		if (cursor.moveToFirst()) {
 			contactName = cursor
 					.getString(cursor
 							.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
@@ -318,49 +267,47 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 		return contactName;
 	}
 
-	public static String getFormatTime(long ms)
-	{
+	public static String getFormatTime(long ms) {
 		SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
 		return formatter.format(ms * 1000);
 	}
 
 	// 用来模拟滑动接电话或挂电话。
 	@Override
-	public void onUnlocked(View v)
-	{
+	public void onUnlocked(View v) {
 		// TODO Auto-generated method stub
-		switch (v.getId())
-		{
-		case R.id.answerCall:
-		{
-			answerCall();
-
-		}
-			break;
-		case R.id.blockCall:
-		{
-			endCall();
-		}
-			break;
+		switch (v.getId()) {
+		// case R.id.answerCall:
+		// {
+		// answerCall();
+		//
+		// }
+		// break;
+		// case R.id.blockCall:
+		// {
+		// endCall();
+		// }
+		// break;
 		default:
 			break;
 		}
 	}
 
 	@Override
-	public void onClick(View v)
-	{
+	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		switch (v.getId())
-		{
-		case R.id.hangupCall:
-		{
+		switch (v.getId()) {
+		case R.id.hangupCall: {
 			endCall();
 		}
 			break;
-		case R.id.closeBtn:
-		{
+		case R.id.closeBtn: {
 			close();
+			break;
+		}
+		case R.id.hangingCall: {
+			endCall();
+			break;
 		}
 		default:
 			break;

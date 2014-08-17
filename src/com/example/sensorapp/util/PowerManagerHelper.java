@@ -1,19 +1,15 @@
 package com.example.sensorapp.util;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
 public class PowerManagerHelper {
-	private Context context;
 	private PowerManager powerManager;
 	private WakeLock mWakeLock;
 
+	@SuppressWarnings("deprecation")
 	public PowerManagerHelper(Context context) {
-		// TODO Auto-generated constructor stub
-		this.context = context;
 		powerManager = (PowerManager) context
 				.getSystemService(Context.POWER_SERVICE);
 		mWakeLock = powerManager.newWakeLock(

@@ -4,24 +4,14 @@
 package com.example.sensorapp.util;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
-import android.provider.BaseColumns;
-import android.provider.ContactsContract;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Audio.AudioColumns;
-import android.provider.MediaStore.MediaColumns;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
-
-import com.example.sensorapp.music.Mp3Info;
 
 /**
  * @author Administrator
@@ -100,39 +90,6 @@ public class PhoneUtil {
 
 	private boolean checkNumberInvalidate(String number) {
 		return !(number == null || number.equals("")) && PhoneNumberUtils.isGlobalPhoneNumber(number);
-	}
-
-	public static List<Mp3Info> getMp3Infos(Context context) {
-		Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
-
-		List<Mp3Info> mp3Infos = new ArrayList<Mp3Info>();
-		if (cursor == null)return mp3Infos;
-		for (int i = 0; i < cursor.getCount(); i++) {
-			cursor.moveToNext();
-			Mp3Info mp3Info = new Mp3Info();
-			long id = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID)); // 音乐id
-			String title = cursor.getString((cursor.getColumnIndex(MediaColumns.TITLE))); // 音乐标题
-			String artist = cursor.getString(cursor.getColumnIndex(AudioColumns.ARTIST)); // 艺术家
-			String album = cursor.getString(cursor.getColumnIndex(AudioColumns.ALBUM)); // 专辑
-			long albumId = cursor.getInt(cursor.getColumnIndex(AudioColumns.ALBUM_ID));
-			long duration = cursor.getLong(cursor.getColumnIndex(AudioColumns.DURATION)); // 时长
-			long size = cursor.getLong(cursor.getColumnIndex(MediaColumns.SIZE)); // 文件大小
-			String url = cursor.getString(cursor.getColumnIndex(MediaColumns.DATA)); // 文件路径
-			int isMusic = cursor.getInt(cursor.getColumnIndex(AudioColumns.IS_MUSIC)); // 是否为音乐
-			if (isMusic != 0) { // 只把音乐添加到集合当中
-				mp3Info.setId(id);
-				mp3Info.setTitle(title);
-				mp3Info.setArtist(artist);
-				mp3Info.setAlbum(album);
-				mp3Info.setAlbumId(albumId);
-				mp3Info.setDuration(duration);
-				mp3Info.setSize(size);
-				mp3Info.setUri(url);
-				mp3Infos.add(mp3Info);
-			}
-		}
-		cursor.close();
-		return mp3Infos;
 	}
 
 }

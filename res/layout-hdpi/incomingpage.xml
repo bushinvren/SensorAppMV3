@@ -7,8 +7,7 @@
 
     <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="300.0dip"
-        android:background="@drawable/back00" >
+        android:layout_height="300.0dip" >
 
         <RelativeLayout
             android:layout_width="fill_parent"
