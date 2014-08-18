@@ -36,6 +36,7 @@ public class MainPageFragment extends Object {
 
 	private TextView simpledigitalclock;
 
+	private ImageView cloudImage;
 	private ImageView unansweredImage;
 	private ImageView unreadSMSImage;
 	private ImageView batteryImage;
@@ -84,6 +85,8 @@ public class MainPageFragment extends Object {
 				.findViewById(R.id.simpledigitalclock);
 		simpledigitalclock.setTypeface(fontFace);
 
+		cloudImage = (ImageView) view
+				.findViewById(R.id.imageViewcloudicon);
 		unansweredImage = (ImageView) view
 				.findViewById(R.id.imageViewmissedincomingicon);
 		unreadSMSImage = (ImageView) view
@@ -143,18 +146,22 @@ public class MainPageFragment extends Object {
 		int smsNoReadCount = newSmsCount + newMmsCount;
 
 		if (newCallCount > 0) {
+			cloudImage.setVisibility(View.INVISIBLE);
 			unansweredImage.setVisibility(View.VISIBLE);
 			unreadSMSImage.setVisibility(View.INVISIBLE);
 			batteryImage.setVisibility(View.INVISIBLE);
 		} else if (smsNoReadCount > 0) {
+			cloudImage.setVisibility(View.INVISIBLE);
 			unansweredImage.setVisibility(View.INVISIBLE);
 			unreadSMSImage.setVisibility(View.VISIBLE);
 			batteryImage.setVisibility(View.INVISIBLE);
 		} else if (isBatteryLow) {
+			cloudImage.setVisibility(View.INVISIBLE);
 			unansweredImage.setVisibility(View.INVISIBLE);
 			unreadSMSImage.setVisibility(View.INVISIBLE);
 			batteryImage.setVisibility(View.VISIBLE);
 		} else {
+			cloudImage.setVisibility(View.VISIBLE);
 			unansweredImage.setVisibility(View.INVISIBLE);
 			unreadSMSImage.setVisibility(View.INVISIBLE);
 			batteryImage.setVisibility(View.INVISIBLE);

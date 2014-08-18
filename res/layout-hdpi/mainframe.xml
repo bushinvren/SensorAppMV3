@@ -12,9 +12,9 @@
         android:paddingTop="40dp"
         android:singleLine="true"
         android:text="12:05"
-        android:textScaleX="0.8"
         android:textColor="#ffffffff"
-        android:textSize="180sp" />
+        android:textScaleX="0.8"
+        android:textSize="160sp" />
 
     <FrameLayout
         android:id="@id/framelayoutcenterline"
@@ -27,11 +27,19 @@
         android:layout_height="match_parent" >
 
         <ImageView
+            android:id="@+id/imageViewcloudicon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/new_cloud2" />
+
+        <ImageView
             android:id="@id/imageViewmissedincomingicon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/new_unanswer" />
+            android:src="@drawable/new_unanswer"
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@id/imageViewnewmessageicon"

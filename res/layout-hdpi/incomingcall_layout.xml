@@ -18,28 +18,20 @@
             android:gravity="center_vertical"
             android:text="86075523333333333"
             android:textColor="@android:color/white"
-            android:textSize="48sp" />
+            android:textSize="96sp" />
 
         <FrameLayout
             android:id="@+id/callCheckLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
             android:layout_below="@id/incomingCallInfo" >
-
-            <ImageView
-                android:id="@+id/answeringCall"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/new_answer"
-                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/hangingCall"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/new_hangup" />
+                android:layout_height="288dp"
+                android:contentDescription="@string/app_name" />
         </FrameLayout>
     </RelativeLayout>
 

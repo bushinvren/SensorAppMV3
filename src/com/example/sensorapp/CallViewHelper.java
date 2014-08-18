@@ -7,13 +7,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.PixelFormat;
+import android.graphics.Typeface;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -38,13 +43,15 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 	private View callCheckLayout;
 	private View answeringLayout;
 	private View closeBtn;
-	private ImageView answerCallImageView;
 	private ImageView hangCallImageView;
 
 	public ITelephony iTelephony;
 	private int selectedIndex = 0;
 	private WindowManager windowManager = null;
 	WindowManager.LayoutParams param;
+	
+	private GestureDetector mGesture = null;  
+
 
 	private boolean visible = false;
 
@@ -74,10 +81,17 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 
 		incomingNumberTextView = (TextView) view
 				.findViewById(R.id.incomingCallInfo);
+		Typeface fontFace = Typeface.createFromAsset(context.getAssets(),
+				"DFPixelFont.ttf");
+		incomingNumberTextView.setTypeface(fontFace);
 		// answerCallView = (LockImageView) view.findViewById(R.id.answerCall);
 		// blockCallView = (LockImageView) view.findViewById(R.id.blockCall);
-		answerCallImageView = (ImageView) view.findViewById(R.id.answeringCall);
 		hangCallImageView = (ImageView) view.findViewById(R.id.hangingCall);
+		hangCallImageView.setBackgroundResource(R.drawable.incoming_anim);
+		AnimationDrawable anim = (AnimationDrawable) hangCallImageView
+				.getBackground();
+		anim.start();
+
 		callTimeTextView = (TextView) view.findViewById(R.id.callTime);
 		hangupView = view.findViewById(R.id.hangupCall);
 		callCheckLayout = view.findViewById(R.id.callCheckLayout);
@@ -98,10 +112,42 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 
 		// answerCallView.setOnLockListener(this);
 		// blockCallView.setOnLockListener(this);
-		answerCallImageView.setOnClickListener(this);
 		hangCallImageView.setOnClickListener(this);
 		hangupView.setOnClickListener(this);
 		closeBtn.setOnClickListener(this);
+		
+		mGesture = new GestureDetector(context, new OnGestureListener() {
+			
+			@Override
+			public boolean onSingleTapUp(MotionEvent e) {
+				return false;
+			}
+			
+			@Override
+			public void onShowPress(MotionEvent e) {
+			}
+			
+			@Override
+			public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+					float distanceY) {
+				return false;
+			}
+			
+			@Override
+			public void onLongPress(MotionEvent e) {
+			}
+			
+			@Override
+			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+					float velocityY) {
+				return false;
+			}
+			
+			@Override
+			public boolean onDown(MotionEvent e) {
+				return false;
+			}
+		});
 	}
 
 	public void show() {
@@ -275,7 +321,6 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 	// 用来模拟滑动接电话或挂电话。
 	@Override
 	public void onUnlocked(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		// case R.id.answerCall:
 		// {

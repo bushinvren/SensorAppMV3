@@ -58,6 +58,8 @@ public class EnterActivity extends SuperFragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceStates) {
 		super.onCreate(savedInstanceStates);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		// getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
 		// WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

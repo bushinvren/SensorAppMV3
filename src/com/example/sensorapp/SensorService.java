@@ -2,16 +2,22 @@ package com.example.sensorapp;
 
 import java.util.List;
 
+import com.example.sensorapp.ui.SuperFragmentActivity;
+import com.example.sensorapp.util.PowerManagerHelper;
+
 import android.app.ActivityManager;
+import android.app.KeyguardManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManager.RunningTaskInfo;
-import android.app.KeyguardManager;
+import android.app.KeyguardManager.KeyguardLock;
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -22,11 +28,11 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.provider.Settings;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-
-import com.example.sensorapp.ui.SuperFragmentActivity;
+import android.widget.Filter;
 
 public class SensorService extends Service {
 	private IBinder binder = new SensorService.LocalBinder();
@@ -36,24 +42,22 @@ public class SensorService extends Service {
 	// private String packageName;
 	private static SuperFragmentActivity mActivity;
 
-	// private PowerManagerHelper powerManagerHelper;
+	private PowerManagerHelper powerManagerHelper;
 
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
 	WakeLock wl;
-	// private int mRate = SensorManager.SENSOR_DELAY_NORMAL;
-	private int mRate = 5000000;
+	private int mRate = SensorManager.SENSOR_DELAY_NORMAL;
+	// private int mRate = 50000;
 
 	private float value = -999f;
-
-	private int lastMag = 0;
 
 	public static boolean isCloseCover = false;
 
 	// 声明键盘管理器
 	KeyguardManager mKeyguardManager = null;
 	// 声明键盘锁
-	// private KeyguardLock mKeyguardLock = null;
+	private KeyguardLock mKeyguardLock = null;
 	// 声明电源管理器
 	private static PowerManager pm;
 	private static PowerManager.WakeLock wakeLock;
@@ -123,7 +127,7 @@ public class SensorService extends Service {
 
 		mActivity = ((SensorApp) getApplication()).getInstance();
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 		mSensorManager.registerListener(mSensorListener, mSensor, mRate);
 
 		isRun = true;
@@ -138,6 +142,7 @@ public class SensorService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		try {
+			// TODO Auto-generated method stub
 			if (intent.getBooleanExtra("OUTCALL", false))// 去电
 			{
 				// showViewCallWithAnsweringMode(true);
@@ -216,6 +221,7 @@ public class SensorService extends Service {
 
 		@Override
 		public void onSensorChanged(SensorEvent event) {
+
 			// 判断是否注册
 			if (GlobalVar.checkId) {
 				SharedPreferences preferences2 = getApplicationContext()
@@ -231,7 +237,13 @@ public class SensorService extends Service {
 			if (!GlobalVar.isOpenSensor) {
 				return;
 			}
+			// Log.e("zhurwO",
+			// String.valueOf(getResources().getConfiguration().orientation));
+			// 判断横竖屏
 
+			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+				return;
+			}
 			// 屏蔽腾讯软件
 			ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 			List<RunningTaskInfo> tasksInfo = activityManager
@@ -247,22 +259,18 @@ public class SensorService extends Service {
 			}
 
 			// TODO Auto-generated method stub
-			if (event.sensor.getType() != Sensor.TYPE_MAGNETIC_FIELD)
+			if (event.sensor.getType() != Sensor.TYPE_PROXIMITY)
 				return;
 			value = event.values[SensorManager.DATA_X];
 			float valuey = event.values[SensorManager.DATA_Y];
 			float valuez = event.values[SensorManager.DATA_Z];
+			Log.e("valuex", String.valueOf(value));
+			Log.e("valuey", String.valueOf(valuey));
+			Log.e("valuez", String.valueOf(valuez));
 
-			float mag = (float) Math.sqrt(Math.pow(value, 2)
-					+ Math.pow(valuey, 2) + Math.pow(valuez, 2));
-			if (lastMag == 0) {
-				lastMag = (int) mag;
-			}
-			float diff = Math.abs(mag - lastMag);
-
-			Log.d("valuea", "MAGNETIC mag= " + String.valueOf(mag));
-			if (diff > 400 && isCloseCover)// 远离
+			if (value > 0)// 远离
 			{
+				Thread.interrupted();//  中断sleep，可防止传感器过度灵敏
 				isCloseCover = false;
 				// 之前的方法太暴力，不管当前在运行什么都会被切换到后台去。
 				// 此方式只结束当前的程序，而service在结束自己后又会自动启动，所以可行。
@@ -281,11 +289,11 @@ public class SensorService extends Service {
 
 				callViewHelper.close();
 
-			} else if (diff < 400 && !isCloseCover)
+			} else
 			// 关闭
 			{
 				try {
-
+					Thread.sleep(150);// 为了减低传感器灵敏度，与上面的Thread.interrupted()配合
 					isCloseCover = true;
 					{
 
@@ -306,9 +314,9 @@ public class SensorService extends Service {
 					if (phoneStatesListener.getCurrentState() == TelephonyManager.CALL_STATE_OFFHOOK) {
 						handler.sendEmptyMessage(MyPhoneStatesListener.MSG_CALL_HOOK);
 					}
-				} catch (Exception e) {
+				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
-					Log.e("onSensorChange", e.toString());
+					Log.e("tag", "时间太短，不出现界面");
 				}
 
 			}
