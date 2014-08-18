@@ -12,8 +12,9 @@
         android:paddingTop="40dp"
         android:singleLine="true"
         android:text="12:05"
+        android:textScaleX="0.8"
         android:textColor="#ffffffff"
-        android:textSize="140sp" />
+        android:textSize="180sp" />
 
     <FrameLayout
         android:id="@id/framelayoutcenterline"

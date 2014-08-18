@@ -231,7 +231,9 @@ public class MainPageFragment extends Object {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
+			context.unregisterReceiver(this);
 			if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
+
 				int level = intent.getIntExtra("level", 0);
 				int scale = intent.getIntExtra("scale", 100);
 
