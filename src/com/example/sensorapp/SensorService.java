@@ -262,12 +262,12 @@ public class SensorService extends Service {
 
 			float mag = (float) Math.sqrt(Math.pow(value, 2)
 					+ Math.pow(valuey, 2) + Math.pow(valuez, 2));
-			
+
 			float diff = mag - lastMag;
 
-			Log.d("valuea", "diff = " + String.valueOf(diff));
-			if (diff > 200 && isCloseCover)// 远离
-			{
+			//Log.d("valuea", "diff = " + String.valueOf(diff));
+			if (diff > 400) {
+				// 远离
 				isCloseCover = false;
 				// 之前的方法太暴力，不管当前在运行什么都会被切换到后台去。
 				// 此方式只结束当前的程序，而service在结束自己后又会自动启动，所以可行。
@@ -286,9 +286,8 @@ public class SensorService extends Service {
 
 				callViewHelper.close();
 
-			} else if (diff < -200 && !isCloseCover)
-			// 关闭
-			{
+			} else if (diff < -400) {
+				// 关闭
 				try {
 
 					isCloseCover = true;

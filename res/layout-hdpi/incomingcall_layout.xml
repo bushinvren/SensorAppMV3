@@ -16,16 +16,15 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center_vertical"
-            android:text="86075523333333333"
+            android:text="123456"
             android:textColor="@android:color/white"
             android:textSize="96sp" />
 
         <FrameLayout
             android:id="@+id/callCheckLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/incomingCallInfo" >
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" >
 
             <ImageView
                 android:id="@+id/hangingCall"

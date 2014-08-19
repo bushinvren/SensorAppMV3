@@ -2,6 +2,7 @@ package com.example.sensorapp;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,22 +15,19 @@ import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.internal.telephony.ITelephony;
-import com.example.sensorapp.ui.LockImageView;
 
-public class CallViewHelper implements LockImageView.OnUnLockListener,
-		View.OnClickListener {
-	private String incomingNumber;
+public class CallViewHelper implements View.OnClickListener {
+	// private String incomingNumber;
 	// private long callTime;
 
 	private Context context = null;
@@ -46,14 +44,12 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 	private ImageView hangCallImageView;
 
 	public ITelephony iTelephony;
-	private int selectedIndex = 0;
+	// private int selectedIndex = 0;
 	private WindowManager windowManager = null;
 	WindowManager.LayoutParams param;
-	
-	private GestureDetector mGesture = null;  
-
 
 	private boolean visible = false;
+	private float startY = 0;
 
 	public boolean getVisible() {
 		return visible;
@@ -75,17 +71,15 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 				WindowManager.LayoutParams.MATCH_PARENT,
 				WindowManager.LayoutParams.MATCH_PARENT,
 				WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
-				WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
+				WindowManager.LayoutParams.FLAG_FULLSCREEN
 						| WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
 				PixelFormat.RGBA_8888);
 
-		incomingNumberTextView = (TextView) view
-				.findViewById(R.id.incomingCallInfo);
 		Typeface fontFace = Typeface.createFromAsset(context.getAssets(),
 				"DFPixelFont.ttf");
+		incomingNumberTextView = (TextView) view
+				.findViewById(R.id.incomingCallInfo);
 		incomingNumberTextView.setTypeface(fontFace);
-		// answerCallView = (LockImageView) view.findViewById(R.id.answerCall);
-		// blockCallView = (LockImageView) view.findViewById(R.id.blockCall);
 		hangCallImageView = (ImageView) view.findViewById(R.id.hangingCall);
 		hangCallImageView.setBackgroundResource(R.drawable.incoming_anim);
 		AnimationDrawable anim = (AnimationDrawable) hangCallImageView
@@ -93,6 +87,7 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 		anim.start();
 
 		callTimeTextView = (TextView) view.findViewById(R.id.callTime);
+		callTimeTextView.setTypeface(fontFace);
 		hangupView = view.findViewById(R.id.hangupCall);
 		callCheckLayout = view.findViewById(R.id.callCheckLayout);
 		answeringLayout = view.findViewById(R.id.answeringLayout);
@@ -115,37 +110,28 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 		hangCallImageView.setOnClickListener(this);
 		hangupView.setOnClickListener(this);
 		closeBtn.setOnClickListener(this);
-		
-		mGesture = new GestureDetector(context, new OnGestureListener() {
-			
+
+		hangCallImageView.setOnTouchListener(new OnTouchListener() {
+
 			@Override
-			public boolean onSingleTapUp(MotionEvent e) {
-				return false;
-			}
-			
-			@Override
-			public void onShowPress(MotionEvent e) {
-			}
-			
-			@Override
-			public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-					float distanceY) {
-				return false;
-			}
-			
-			@Override
-			public void onLongPress(MotionEvent e) {
-			}
-			
-			@Override
-			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-					float velocityY) {
-				return false;
-			}
-			
-			@Override
-			public boolean onDown(MotionEvent e) {
-				return false;
+			public boolean onTouch(View v, MotionEvent event) {
+				int y = (int) event.getRawY();
+
+				switch (event.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					startY = y;
+					break;
+				case MotionEvent.ACTION_MOVE:
+					break;
+				case MotionEvent.ACTION_UP:
+					if (y - startY > 20) {
+						endCall();
+					} else if (y - startY < -20) {
+						answerCall();
+					}
+					break;
+				}
+				return true;// 处理了触摸消息，消息不再传递
 			}
 		});
 	}
@@ -194,7 +180,6 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 
 	}
@@ -209,7 +194,6 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 			}
 
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			close();
@@ -227,7 +211,6 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 				iTelephony.answerRingingCall();
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			Log.e("call_answer", e.toString());
 			try {
 				// 插耳机
@@ -314,33 +297,13 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 	}
 
 	public static String getFormatTime(long ms) {
-		SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
+		SimpleDateFormat formatter = new SimpleDateFormat("mm:ss",
+				Locale.getDefault());
 		return formatter.format(ms * 1000);
-	}
-
-	// 用来模拟滑动接电话或挂电话。
-	@Override
-	public void onUnlocked(View v) {
-		switch (v.getId()) {
-		// case R.id.answerCall:
-		// {
-		// answerCall();
-		//
-		// }
-		// break;
-		// case R.id.blockCall:
-		// {
-		// endCall();
-		// }
-		// break;
-		default:
-			break;
-		}
 	}
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.hangupCall: {
 			endCall();
@@ -351,7 +314,7 @@ public class CallViewHelper implements LockImageView.OnUnLockListener,
 			break;
 		}
 		case R.id.hangingCall: {
-			endCall();
+			// endCall();
 			break;
 		}
 		default:
