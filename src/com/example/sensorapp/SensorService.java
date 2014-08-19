@@ -265,8 +265,8 @@ public class SensorService extends Service {
 
 			float diff = mag - lastMag;
 
-			//Log.d("valuea", "diff = " + String.valueOf(diff));
-			if (diff > 400) {
+			Log.d("valuea", "diff = " + String.valueOf(diff));
+			if (diff > 200) {
 				// 远离
 				isCloseCover = false;
 				// 之前的方法太暴力，不管当前在运行什么都会被切换到后台去。
@@ -286,7 +286,7 @@ public class SensorService extends Service {
 
 				callViewHelper.close();
 
-			} else if (diff < -400) {
+			} else if (diff < -200) {
 				// 关闭
 				try {
 
