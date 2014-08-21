@@ -37,7 +37,6 @@ public class MyPhoneStatesListener extends PhoneStateListener {
 
 	@Override
 	public void onCallStateChanged(int state, String incomingNumber) {
-		// TODO Auto-generated method stub
 		super.onCallStateChanged(state, incomingNumber);
 		currentState = state;
 		do {
@@ -63,7 +62,7 @@ public class MyPhoneStatesListener extends PhoneStateListener {
 			} else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
 				Settings.System.putString(context.getContentResolver(),
 						"proximity_sensor", "0");// 禁止屏幕熄灭
-				
+
 				isCalling = true;
 				Message msg = handler.obtainMessage(MSG_CALL_HOOK);
 				msg.obj = incomingNumber;
@@ -78,14 +77,12 @@ public class MyPhoneStatesListener extends PhoneStateListener {
 
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
 			callTime = 0;
 			do {
 
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				callTime++;

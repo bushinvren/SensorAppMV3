@@ -134,6 +134,29 @@ public class CallViewHelper implements View.OnClickListener {
 				return true;// 处理了触摸消息，消息不再传递
 			}
 		});
+		
+		hangupView.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				int y = (int) event.getRawY();
+
+				switch (event.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					startY = y;
+					break;
+				case MotionEvent.ACTION_MOVE:
+					break;
+				case MotionEvent.ACTION_UP:
+					if (y - startY > 20) {
+						endCall();
+					}
+					break;
+				}
+				return true;// 处理了触摸消息，消息不再传递
+			}
+		});
+		
 	}
 
 	public void show() {
@@ -203,6 +226,7 @@ public class CallViewHelper implements View.OnClickListener {
 	private void answerCall() {
 		try {
 
+			incomingNumberTextView.setText("");
 			callCheckLayout.setVisibility(View.INVISIBLE);
 			answeringLayout.setVisibility(View.VISIBLE);
 
@@ -306,7 +330,7 @@ public class CallViewHelper implements View.OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.hangupCall: {
-			endCall();
+			// endCall();
 		}
 			break;
 		case R.id.closeBtn: {

@@ -79,6 +79,7 @@ public class SensorService extends Service {
 			if (intent.getAction().equals("action.hs.opensensor")) {
 				// openSensor();
 			}
+
 		}
 	};
 
@@ -234,7 +235,7 @@ public class SensorService extends Service {
 			}
 
 			// 防止过于频繁 yuc
-			if (System.currentTimeMillis() - lastTime < 500) {
+			if (System.currentTimeMillis() - lastTime < 700) {
 				return;
 			}
 			lastTime = System.currentTimeMillis();
@@ -256,17 +257,16 @@ public class SensorService extends Service {
 			if (event.sensor.getType() != Sensor.TYPE_MAGNETIC_FIELD)
 				return;
 
-			value = event.values[SensorManager.DATA_X];
-			float valuey = event.values[SensorManager.DATA_Y];
-			float valuez = event.values[SensorManager.DATA_Z];
+			double mag = Math.sqrt((event.values[0] * event.values[0])
+					+ (event.values[1] * event.values[1])
+					+ (event.values[2] * event.values[2]));
 
-			float mag = (float) Math.sqrt(Math.pow(value, 2)
-					+ Math.pow(valuey, 2) + Math.pow(valuez, 2));
+			double diff = mag - lastMag;
 
-			float diff = mag - lastMag;
+			Log.d("valuea", "mag = " + mag + " x=" + event.values[0] + " y=" + event.values[1] + " z=" + event.values[2]);
+			Log.d("valuea", "diff = " + diff);
 
-			Log.d("valuea", "diff = " + String.valueOf(diff));
-			if (diff > 200) {
+			if (diff < -300 && isCloseCover) {
 				// 远离
 				isCloseCover = false;
 				// 之前的方法太暴力，不管当前在运行什么都会被切换到后台去。
@@ -286,7 +286,7 @@ public class SensorService extends Service {
 
 				callViewHelper.close();
 
-			} else if (diff < -200) {
+			} else if (diff > 300 && !isCloseCover) {
 				// 关闭
 				try {
 

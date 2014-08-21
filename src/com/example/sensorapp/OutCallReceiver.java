@@ -8,15 +8,12 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class OutCallReceiver extends BroadcastReceiver
 {
-
-	private static final String ACTION_OUT_CALLING = Intent.ACTION_NEW_OUTGOING_CALL;
 	private String Tag = this.getClass().getSimpleName();
 	private static String call_number = null;
 
@@ -30,17 +27,6 @@ public class OutCallReceiver extends BroadcastReceiver
 		if (!startServiceFlag)
 		{
 			return;
-		}
-
-		if (ACTION_OUT_CALLING.equals(intent.getAction()))
-		{
-			String phoneNum = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
-			Log.e("test", phoneNum);
-			Intent intent1 = new Intent(context, SensorService.class);
-			intent1.putExtra("OUTCALL", true);
-			intent1.putExtra("INCOMINGNUMS", phoneNum);
-			context.startService(intent1);
-			Log.v("OutCallReceiver", "ACTION_OUT_CALLING");
 		}
 
 		// 去电

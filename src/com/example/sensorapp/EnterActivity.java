@@ -194,7 +194,6 @@ public class EnterActivity extends SuperFragmentActivity implements
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction("action.hs.finish");
 		registerReceiver(broadcastReceiver, intentFilter);
-
 		checkStartFlag();
 		lock();
 
