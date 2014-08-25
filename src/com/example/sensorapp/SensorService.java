@@ -47,7 +47,7 @@ public class SensorService extends Service {
 	private float value = -999f;
 
 	private double lastMag = 0;
-	// private long lastTime = 0;
+	private long lastTime = 0;
 
 	public static boolean isCloseCover = false;
 
@@ -234,30 +234,34 @@ public class SensorService extends Service {
 				return;
 			}
 
-			// 防止过于频繁 yuc
-			// if (System.currentTimeMillis() - lastTime < 700) {
-			// return;
-			// }
-			// lastTime = System.currentTimeMillis();
-
 			if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
 				value = event.values[0];
 				isCloseCover = (value <= 0);
 				return;
 			} else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+
+				// 防止过于频繁 yuc
+				// if (System.currentTimeMillis() - lastTime < 500) {
+				// return;
+				// }
+				// lastTime = System.currentTimeMillis();
+
 				double mag = Math.sqrt((event.values[0] * event.values[0])
 						+ (event.values[1] * event.values[1])
 						+ (event.values[2] * event.values[2]));
 
 				double diff = Math.abs(mag - lastMag);
-				lastMag = mag;
-
+				if (diff > 10) {
+					lastMag = mag;
+				}
 				Log.d("valuea", "mag = " + mag + " x=" + event.values[0]
 						+ " y=" + event.values[1] + " z=" + event.values[2]);
 				Log.d("valuea", "abs diff = " + diff);
-				if (diff < 100) {
+				if (diff < 200) {
 					return;
 				}
+			} else {
+				return;
 			}
 
 			// 屏蔽腾讯软件
@@ -402,4 +406,5 @@ public class SensorService extends Service {
 
 		return false;
 	}
+
 }
