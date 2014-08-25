@@ -159,7 +159,6 @@ public class EnterActivity extends SuperFragmentActivity implements
 
 					@Override
 					public void onUnlocked(View v) {
-						// TODO Auto-generated method stub
 						unlock();
 					}
 				});
@@ -184,7 +183,7 @@ public class EnterActivity extends SuperFragmentActivity implements
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			// TODO Auto-generated method stub
+
 			finish();
 		}
 	};
@@ -193,6 +192,7 @@ public class EnterActivity extends SuperFragmentActivity implements
 		super.onResume();
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction("action.hs.finish");
+
 		registerReceiver(broadcastReceiver, intentFilter);
 		checkStartFlag();
 		lock();
@@ -253,19 +253,16 @@ public class EnterActivity extends SuperFragmentActivity implements
 
 	@Override
 	public void onPageScrollStateChanged(int arg0) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onPageScrolled(int arg0, float arg1, int arg2) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onPageSelected(int arg0) {
-		// TODO Auto-generated method stub
 		// Log.e("ViewPager.onPageSelected.", arg0 + "," + (arg0 %
 		// fragments.size()));
 		int current = arg0 % fragments.size();
@@ -279,7 +276,6 @@ public class EnterActivity extends SuperFragmentActivity implements
 
 	@Override
 	public void onClick(View arg0) {
-		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
 		case R.id.imageViewmessageicon: {
 			showPagerLayer(false);

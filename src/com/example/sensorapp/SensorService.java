@@ -30,11 +30,11 @@ import com.example.sensorapp.ui.SuperFragmentActivity;
 
 public class SensorService extends Service {
 	private IBinder binder = new SensorService.LocalBinder();
-	private boolean isRun = false;
+	// private boolean isRun = false;
 
 	private ActivityManager activityManager;
 	// private String packageName;
-	private static SuperFragmentActivity mActivity;
+	// private static SuperFragmentActivity mActivity;
 
 	// private PowerManagerHelper powerManagerHelper;
 
@@ -46,8 +46,8 @@ public class SensorService extends Service {
 
 	private float value = -999f;
 
-	private int lastMag = 0;
-	private long lastTime = 0;
+	private double lastMag = 0;
+	// private long lastTime = 0;
 
 	public static boolean isCloseCover = false;
 
@@ -71,7 +71,6 @@ public class SensorService extends Service {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			// TODO Auto-generated method stub
 			if (intent.getAction().equals("action.hs.closesensor")) {
 				// closeSensor();
 			}
@@ -85,7 +84,6 @@ public class SensorService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
 		return binder;
 	}
 
@@ -123,12 +121,15 @@ public class SensorService extends Service {
 
 		mKeyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
 
-		mActivity = ((SensorApp) getApplication()).getInstance();
+		// mActivity = ((SensorApp) getApplication()).getInstance();
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+		Sensor mPSensor = mSensorManager
+				.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 		mSensorManager.registerListener(mSensorListener, mSensor, mRate);
+		mSensorManager.registerListener(mSensorListener, mPSensor, mRate);
 
-		isRun = true;
+		// isRun = true;
 
 		activityManager = (ActivityManager) this
 				.getSystemService(Context.ACTIVITY_SERVICE);
@@ -181,13 +182,13 @@ public class SensorService extends Service {
 	}
 
 	public void openSensor() {
-		isRun = true;
+		// isRun = true;
 		mSensorManager.registerListener(mSensorListener, mSensor, mRate);
 	}
 
 	public void closeSensor() {
 		mSensorManager.unregisterListener(mSensorListener, mSensor);
-		isRun = false;
+		// isRun = false;
 	}
 
 	public void showViewCallWithAnsweringMode(boolean answerMode) {
@@ -200,7 +201,6 @@ public class SensorService extends Service {
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (isCloseCover) {
@@ -235,10 +235,30 @@ public class SensorService extends Service {
 			}
 
 			// 防止过于频繁 yuc
-			if (System.currentTimeMillis() - lastTime < 700) {
+			// if (System.currentTimeMillis() - lastTime < 700) {
+			// return;
+			// }
+			// lastTime = System.currentTimeMillis();
+
+			if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+				value = event.values[0];
+				isCloseCover = (value <= 0);
 				return;
+			} else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+				double mag = Math.sqrt((event.values[0] * event.values[0])
+						+ (event.values[1] * event.values[1])
+						+ (event.values[2] * event.values[2]));
+
+				double diff = Math.abs(mag - lastMag);
+				lastMag = mag;
+
+				Log.d("valuea", "mag = " + mag + " x=" + event.values[0]
+						+ " y=" + event.values[1] + " z=" + event.values[2]);
+				Log.d("valuea", "abs diff = " + diff);
+				if (diff < 100) {
+					return;
+				}
 			}
-			lastTime = System.currentTimeMillis();
 
 			// 屏蔽腾讯软件
 			ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -246,7 +266,6 @@ public class SensorService extends Service {
 					.getRunningTasks(1);
 			String currentPackName = "";
 			if (tasksInfo.size() > 0) {
-
 				currentPackName = tasksInfo.get(0).topActivity.getPackageName();
 				Log.e("current", currentPackName);
 			}
@@ -254,53 +273,25 @@ public class SensorService extends Service {
 				return;
 			}
 
-			if (event.sensor.getType() != Sensor.TYPE_MAGNETIC_FIELD)
-				return;
-
-			double mag = Math.sqrt((event.values[0] * event.values[0])
-					+ (event.values[1] * event.values[1])
-					+ (event.values[2] * event.values[2]));
-
-			double diff = mag - lastMag;
-
-			Log.d("valuea", "mag = " + mag + " x=" + event.values[0] + " y=" + event.values[1] + " z=" + event.values[2]);
-			Log.d("valuea", "diff = " + diff);
-
-			if (diff < -300 && isCloseCover) {
+			if (!isCloseCover) {
 				// 远离
-				isCloseCover = false;
 				// 之前的方法太暴力，不管当前在运行什么都会被切换到后台去。
 				// 此方式只结束当前的程序，而service在结束自己后又会自动启动，所以可行。
 				if (isAppOnForeground()) {
-					// android.os.Process.killProcess(android.os.Process.myPid());
-
-					// Intent MyIntent = new Intent(Intent.ACTION_MAIN);
-					// MyIntent.addCategory(Intent.CATEGORY_HOME);
-					// MyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					// startActivity(MyIntent);
-
 					wakeLock.acquire(2000);
 					sendBroadcast(new Intent("action.hs.finish"));
-
 				}
-
 				callViewHelper.close();
-
-			} else if (diff > 300 && !isCloseCover) {
+			} else {
 				// 关闭
 				try {
-
-					isCloseCover = true;
-					{
-
-						Log.e("sensor", "close!!!!!!");
-						Intent intent = new Intent();
-						intent.setClassName("com.example.sensorapp",
-								"com.example.sensorapp.EnterActivity");
-						intent.putExtra("startFlag", "1");
-						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						startActivity(intent);
-					}
+					Log.e("sensor", "close!!!!!!");
+					Intent intent = new Intent();
+					intent.setClassName("com.example.sensorapp",
+							"com.example.sensorapp.EnterActivity");
+					intent.putExtra("startFlag", "1");
+					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(intent);
 					if (phoneStatesListener.getCurrentState() == TelephonyManager.CALL_STATE_RINGING) {
 						Message msg = handler
 								.obtainMessage(MyPhoneStatesListener.MSG_CALL_RING);
@@ -311,26 +302,18 @@ public class SensorService extends Service {
 						handler.sendEmptyMessage(MyPhoneStatesListener.MSG_CALL_HOOK);
 					}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					Log.e("onSensorChange", e.toString());
 				}
-
 			}
-			lastMag = (int) mag;
 		}
-
-		// }
 
 		@Override
 		public void onAccuracyChanged(Sensor sensor, int accuracy) {
-			// TODO Auto-generated method stub
-			Log.e("!!!!", "onAccuracyChanged");
 		}
 	};
 
 	@Override
 	public void onDestroy() {
-		// TODO Auto-generated method stub
 		// liuzw.
 		super.onDestroy();
 		unregisterReceiver(myReceiver);
